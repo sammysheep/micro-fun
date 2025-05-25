@@ -1,6 +1,9 @@
-FROM redhat/ubi8:latest AS builder1
 
 # Install R in /usr/local
+# Customized and forked from: https://github.com/r-hub/r-minimal
+# For use with RHEL 8
+FROM redhat/ubi8:latest AS builder1
+
 RUN yum update \
     && yum install -y wget gcc glibc-devel gcc-gfortran \
     gcc-c++ zlib-devel bzip2-devel xz-devel pcre-devel \
@@ -27,7 +30,7 @@ RUN cd R-${R_VERSION} \
     && make -j 4 \
     && make install
 
-ENV libp=/usr/local/lib/R
+ENV libp=/usr/local/lib*/R
 
 RUN strip -x $libp/bin/exec/R \
     && strip -x $libp/lib/* \
