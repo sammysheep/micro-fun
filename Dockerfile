@@ -6,6 +6,8 @@
 # For use with RHEL 8
 FROM redhat/ubi8:latest AS builder1
 
+SHELL ["/bin/bash", "-c"]
+
 RUN yum update \
     && yum install -y wget gcc glibc-devel gcc-gfortran \
     gcc-c++ zlib-devel bzip2-devel xz-devel pcre-devel \
@@ -32,7 +34,10 @@ RUN cd R-${R_VERSION} \
     && make -j 4 \
     && make install
 
-ENV libp=/usr/local/lib*/R
+RUN if [[ -d "/usr/local/lib64/R" && ! -d "/usr/local/lib/R" ]];then \
+    ln -s /usr/local/lib64/R /usr/local/lib/R; \
+    fi
+ENV libp=/usr/local/lib/R
 
 RUN strip -x $libp/bin/exec/R \
     && strip -x $libp/lib/* \
@@ -62,6 +67,8 @@ RUN yum update \
     --nodocs -y \
     grep gawk procps-ng sed perl gzip tar \
     libgfortran xz-libs libcurl bzip2-libs pcre2 which
+
+RUN rm -rf /micro/lib64/python3.6
 
 FROM redhat/ubi8-micro AS base
 
