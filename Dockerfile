@@ -10,14 +10,14 @@ SHELL ["/bin/bash", "-c"]
 
 RUN yum update \
     && yum install -y wget gcc glibc-devel gcc-gfortran \
-    gcc-c++ zlib-devel bzip2-devel xz-devel pcre-devel \
+    gcc-c++ zlib-devel bzip2-devel xz-devel \
     pcre2-devel libcurl-devel make perl
 
 ARG R_VERSION=4.5.0
 ENV _R_SHLIB_STRIP_=true
 WORKDIR /buildr
 
-RUN yum install -y gcc glibc-devel gcc-gfortran gcc-c++ zlib-devel bzip2-devel xz-devel pcre-devel \
+RUN yum install -y gcc glibc-devel gcc-gfortran gcc-c++ zlib-devel bzip2-devel xz-devel \
     pcre2-devel libcurl-devel make perl wget && \
     yum clean all
 
@@ -66,9 +66,9 @@ RUN yum update \
     --setopt install_weak_deps=false \
     --nodocs -y \
     grep gawk procps-ng sed perl gzip tar \
-    libgfortran xz-libs libcurl bzip2-libs pcre2 which
+    libgfortran xz-libs libcurl bzip2-libs pcre2 which && yum clean all
 
-RUN rm -rf /micro/lib64/python3.6
+RUN rm -rf /micro/lib64/python3.*
 
 FROM redhat/ubi8-micro AS base
 
