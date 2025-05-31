@@ -60,7 +60,7 @@ RUN yum update \
     --releasever 8 \
     --setopt install_weak_deps=false \
     --nodocs -y \
-    grep gawk procps-ng sed perl \
+    grep gawk procps-ng sed perl gzip tar \
     libgfortran xz-libs libcurl bzip2-libs pcre2 which
 
 FROM redhat/ubi8-micro AS base
@@ -77,6 +77,9 @@ COPY --from=builder2 \
     /micro/bin/ps \
     /micro/bin/perl \
     /micro/bin/which \
+    /micro/bin/zcat \
+    /micro/bin/gzip \
+    /micro/bin/tar \
     /bin/
 
 WORKDIR /data
