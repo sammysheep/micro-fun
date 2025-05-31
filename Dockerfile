@@ -74,7 +74,6 @@ COPY --from=builder2 \
     /micro/bin/grep \
     /micro/bin/sed \
     /micro/bin/awk \
-    /micro/bin/gawk \
     /micro/bin/ps \
     /micro/bin/perl \
     /micro/bin/which \
