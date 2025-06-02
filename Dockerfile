@@ -32,7 +32,7 @@ RUN if [[ -d "/usr/local/lib64/R" && ! -d "/usr/local/lib/R" ]];then \
 ENV libp=/usr/local/lib/R
 
 RUN rm -rf $libp/library/*/{demo,help,html,doc} $libp/library/translations
-RUN strip $libp/bin/exec/R
+RUN strip $libp/bin/exec/R $libp/library/*/libs/*so /usr/local/lib/R/lib/*so
 RUN mv $libp/doc/{AUTHORS,COPYRIGHTS} $libp/ && rm -rf $libp/doc
 
 FROM redhat/ubi8:latest AS builder2
