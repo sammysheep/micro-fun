@@ -7,18 +7,21 @@ FROM redhat/ubi8:latest AS builder1
 
 SHELL ["/bin/bash", "-c"]
 
-WORKDIR /buildr
-
 RUN yum update \
     && yum install -y make gcc gcc-c++ gcc-gfortran perl diffutils \
-    zlib-devel bzip2-devel xz-devel pcre2-devel \
+    zlib-devel bzip2-devel xz-devel pcre2-devel libcurl-devel \
     wget
 
-RUN wget https://cran.r-project.org/src/base/R-4/R-4.5.0.tar.gz && tar -xzf R-4.5.0.tar.gz && cd R-4.5.0
+
+WORKDIR /buildr
+
+RUN wget https://cran.r-project.org/src/base/R-4/R-4.5.0.tar.gz && tar -xzf R-4.5.0.tar.gz
+
+WORKDIR /buildr/R-4.5.0
 
 RUN ./configure --prefix=/usr/local --with-readline=no --with-x=no \
     --without-libdeflate-compression --without-recommended-packages --without-tcltk \
-    --enable-java=no --enable-R-profiling=no
+    --enable-java=no --enable-R-profiling=no --disable-openmp
 
 RUN make -j 2 && make install
 
@@ -32,8 +35,6 @@ RUN rm -rf $libp/library/*/{demo,help,html,doc} $libp/library/translations
 RUN strip $libp/bin/exec/R
 RUN mv $libp/doc/{AUTHORS,COPYRIGHTS} $libp/ && rm -rf $libp/doc
 
-
-
 FROM redhat/ubi8:latest AS builder2
 
 WORKDIR /micro
@@ -46,7 +47,7 @@ RUN yum update \
     --setopt install_weak_deps=false \
     --nodocs -y \
     grep gawk procps-ng sed perl gzip tar \
-    which && yum clean all
+    libgfortran which && yum clean all
 
 RUN rm -rf /micro/lib64/python3.*
 
