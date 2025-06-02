@@ -7,6 +7,18 @@ FROM redhat/ubi8:latest AS builder1
 
 SHELL ["/bin/bash", "-c"]
 
+WORKDIR /buildr
+
+RUN yum update \
+    && yum install -y make gcc gcc-c++ gcc-gfortran perl diffutils \
+    zlib-devel bzip2-devel xz-devel pcre2-devel \
+    wget
+
+RUN wget https://cran.r-project.org/src/base/R-4/R-4.5.0.tar.gz && tar -xzf R-4.5.0.tar.gz && cd R-4.5.0
+
+RUN ./configure --prefix=/usr/local --with-readline=no --with-x=no \
+    --without-libdeflate-compression --without-recommended-packages --enable-java=no
+
 
 
 FROM redhat/ubi8:latest AS builder2
