@@ -2,7 +2,7 @@
 
 Supports:
 
-- R (base packages) derived from [r-minimal](https://github.com/r-hub/r-minimal)
+- R (base packages)
 - Perl
 - Nextflow dependencies (awk, sed, grep, ps, etc.)
 - RHEL 8 (veteran GLIBC)
