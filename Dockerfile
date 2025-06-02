@@ -47,6 +47,7 @@ RUN yum update \
     --setopt install_weak_deps=false \
     --nodocs -y \
     grep gawk procps-ng sed perl gzip tar \
+    pcre2 xz-libs bzip2-libs zlib libcurl libgcc \
     libgfortran which && yum clean all
 
 RUN rm -rf /micro/lib64/python3.*
