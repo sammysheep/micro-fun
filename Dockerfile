@@ -18,7 +18,7 @@ RUN wget https://cran.r-project.org/src/base/R-4/R-4.5.0.tar.gz && tar -xzf R-4.
 
 RUN ./configure --prefix=/usr/local --with-readline=no --with-x=no \
     --without-libdeflate-compression --without-recommended-packages --without-tcltk \
-    --enable-java=no
+    --enable-java=no --enable-R-profiling=no
 
 RUN make -j 2 && make install
 
@@ -28,6 +28,9 @@ RUN if [[ -d "/usr/local/lib64/R" && ! -d "/usr/local/lib/R" ]];then \
 
 ENV libp=/usr/local/lib/R
 
+RUN rm -rf $libp/library/*/{demo,help,html,doc} $libp/library/translations
+RUN strip $libp/bin/exec/R
+RUN mv $libp/doc/{AUTHORS,COPYRIGHTS} $libp/ && rm -rf $libp/doc
 
 
 
