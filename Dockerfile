@@ -17,7 +17,17 @@ RUN yum update \
 RUN wget https://cran.r-project.org/src/base/R-4/R-4.5.0.tar.gz && tar -xzf R-4.5.0.tar.gz && cd R-4.5.0
 
 RUN ./configure --prefix=/usr/local --with-readline=no --with-x=no \
-    --without-libdeflate-compression --without-recommended-packages --enable-java=no
+    --without-libdeflate-compression --without-recommended-packages --without-tcltk \
+    --enable-java=no
+
+RUN make -j 2 && make install
+
+RUN if [[ -d "/usr/local/lib64/R" && ! -d "/usr/local/lib/R" ]];then \
+    ln -s /usr/local/lib64/R /usr/local/lib/R; \
+    fi
+
+ENV libp=/usr/local/lib/R
+
 
 
 
